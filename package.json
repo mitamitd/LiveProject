@@ -1,6 +1,10 @@
 {
   "name": "starter-node-angular",
   "main": "server.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "body-parser": "~1.4.2",
     "connect-livereload": "^0.5.3",
