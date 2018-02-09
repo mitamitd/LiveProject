@@ -1,0 +1,36 @@
+<div   class="jumbotron" class="md-padding" ng-cloak layout="column" style="background-color: #FFF">
+<p align="center" style="color: #607D8B">Add Schools</p>
+
+<md-progress-linear ng-show = "progress_bar_school" md-mode="indeterminate"></md-progress-linear>
+
+<span ng-show="isSchoolAdded">School Added successfully.</span>
+<md-card ng-show = "!isSchoolAdded" style="margin:10px;">
+
+
+<div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>School Name</label>
+            <input ng-model="school_details.school_name">
+          </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+            <label>School Code</label>
+            <input ng-model="school_details.school_code">
+          </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+            <label>School's Parent Branch</label>
+            <input ng-model="school_details.head_school_name">
+          </md-input-container>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+            <label>School's Parent Branch Code</label>
+            <input ng-model="school_details.head_school_code">
+          </md-input-container>
+
+</div>
+
+<md-button class="md-raised md-primary" ng-click='add_schools()'>Add Schools</md-button>
+</md-card>
+
+</div>
