@@ -60,7 +60,7 @@ var download = function(){
 
 
   $scope.vm.submit = function(){
-  var apiUrl = "http://localhost:8080/api/login/?username="+$scope.vm.formData.email+"&password="+$scope.vm.formData.password;
+  var apiUrl = "https://mycirculateitround.herokuapp.com/api/login/?username="+$scope.vm.formData.email+"&password="+$scope.vm.formData.password;
         $http.get(apiUrl)
           .then(function(response) {
         var serverResponse = response.data;
