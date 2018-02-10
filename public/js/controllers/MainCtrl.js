@@ -54,7 +54,7 @@ app.factory('authSvc',
             self.login = function(username, password) {
                 deferred = $q.defer()
                 
-                $http.get("http://localhost:8080/api/login/?username="+username+"&password="+password+"&source=WEB")
+                $http.get("https://mycirculateitround.herokuapp.com/api/login/?username="+username+"&password="+password+"&source=WEB")
                 .success(function(result){
                     if (result.isError){
                       console.log('login error')

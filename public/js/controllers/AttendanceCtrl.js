@@ -14,7 +14,7 @@ $scope.isAttMarkReq = false;
 $scope.attDataLoaded = true;
 $scope.msg = "";
 $scope.submit = function(){
-    var apiUrl = "http://localhost:8080/api/submit_att/?";
+    var apiUrl = "https://mycirculateitround.herokuapp.com/api/submit_att/?";
     var students_att = [];
     for (var i = 0; i<$scope.students.length; i++) {
       students_att.push({updated_by:$rootScope.userinfo.info.user_id,class_code:$scope.teacherclasses,data:$scope.students[i]});
@@ -40,7 +40,7 @@ $scope.checkForAttendance = function()
     return;
   }
   $scope.attDataLoaded = false;
-  var apiUrl = "http://localhost:8080/api/check_students_att/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;
+  var apiUrl = "https://mycirculateitround.herokuapp.com/api/check_students_att/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;
      $http.get(apiUrl)
           .then(function(response) {
             var todayAttRes = response.data;
@@ -67,7 +67,7 @@ $scope.checkForAttendance = function()
 
 
 $scope.loadData = function(){
-        var apiUrl = "http://localhost:8080/api/load_data/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;
+        var apiUrl = "https://mycirculateitround.herokuapp.com/api/load_data/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;
         $http.get(apiUrl)
           .then(function(response) {
               var serverResponse = response.data;

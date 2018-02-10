@@ -10,7 +10,7 @@ $scope.school_details = {
 $scope.isSchoolAdded = false;
 $scope.progress_bar_school = false;
 $scope.add_schools = function(){
-	var apiUrl = "http://localhost:8080/api/add_schools/?";
+	var apiUrl = "https://mycirculateitround.herokuapp.com/api/add_schools/?";
 	$scope.progress_bar_school = true;
 	$http.post(apiUrl,$scope.school_details)
           .then(function(response) {

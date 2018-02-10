@@ -36,7 +36,7 @@ var app = angular.module('AttendanceReport',[])
             return;
         }
         $scope.classAttLoaded = false;
-		var apiUrl = "http://localhost:8080/api/getClassAtt/?username="+$rootScope.userinfo.info.user_id+"&school_code="+$rootScope.userinfo.info.school_code+"&class_code="+$scope.teacherclasses+"&sdate="+sdate+"&edate="+edate;
+		var apiUrl = "https://mycirculateitround.herokuapp.com/api/getClassAtt/?username="+$rootScope.userinfo.info.user_id+"&school_code="+$rootScope.userinfo.info.school_code+"&class_code="+$scope.teacherclasses+"&sdate="+sdate+"&edate="+edate;
         $http.get(apiUrl)
           .then(function(response) {
                 var attRes = response.data;
@@ -44,7 +44,7 @@ var app = angular.module('AttendanceReport',[])
                     if(attRes.data.length>0)
                         {
                         classAttData = attRes.data;
-                        var apiClassStudents = "http://localhost:8080/api/getClassStudents/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;  
+                        var apiClassStudents = "https://mycirculateitround.herokuapp.com/api/getClassStudents/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;  
                         $http.get(apiClassStudents)
                         .then(function(response1) {
                             var studentData = response1.data;
