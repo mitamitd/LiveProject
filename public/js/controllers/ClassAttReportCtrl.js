@@ -1,5 +1,6 @@
-var app = angular.module('AttendanceReport',[])
-.controller('ClassAttReportController', function($http,$scope, $rootScope,$location){
+var app = angular.module('AttendanceReport',[]);
+
+app.controller('ClassAttReportController', function($http,$scope, $rootScope,$location,commonservice,webapis){
 
     $scope.userinfo = $rootScope.userinfo.info.class_code;
 
@@ -28,15 +29,18 @@ var app = angular.module('AttendanceReport',[])
     }
     $scope.datadetail();
 	
-    $scope.loadClassReport = function()
+    $scope.loadClassReport = function(ev)
 	{
+        alert(JSON.stringify($rootScope.userinfo)+"");
         if($scope.teacherclasses=="")
         {
-            alert("Please select class first!!");
+           commonservice.showAlert(ev,"Alert Dialog","Please select class first!!","Ok Got it!");
+          // alert("Please select class first!!");
             return;
         }
         $scope.classAttLoaded = false;
-		var apiUrl = "https://mycirculateitround.herokuapp.com/api/getClassAtt/?username="+$rootScope.userinfo.info.user_id+"&school_code="+$rootScope.userinfo.info.school_code+"&class_code="+$scope.teacherclasses+"&sdate="+sdate+"&edate="+edate;
+        var apiUrl = webapis.getUrlForClassAttDateRange($rootScope.userinfo.info.user_id,$rootScope.userinfo.info.school_code,$scope.teacherclasses,sdate,edate);
+		//var apiUrl = commonservice.getBaseUrl()+"/api/getClassAtt/?username="+$rootScope.userinfo.info.user_id+"&school_code="+$rootScope.userinfo.info.school_code+"&class_code="+$scope.teacherclasses+"&sdate="+sdate+"&edate="+edate;
         $http.get(apiUrl)
           .then(function(response) {
                 var attRes = response.data;
@@ -44,7 +48,8 @@ var app = angular.module('AttendanceReport',[])
                     if(attRes.data.length>0)
                         {
                         classAttData = attRes.data;
-                        var apiClassStudents = "https://mycirculateitround.herokuapp.com/api/getClassStudents/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;  
+                        var apiClassStudents = webapis.getUrlForStudentOfClass($scope.teacherclasses,$rootScope.userinfo.info.school_code);
+                        //var apiClassStudents = commonservice.getBaseUrl()+"/api/getClassStudents/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;  
                         $http.get(apiClassStudents)
                         .then(function(response1) {
                             var studentData = response1.data;

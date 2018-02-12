@@ -13,77 +13,26 @@ module.exports = function(app) {
 
 module.exports = function(app) {
 
- app.post('/api/add_schools1/', function (req, res) {
-    console.log("-----------------------working");
-        var username = req.query.username;
-        var body  = req.body;
-        var full_date_obj = imports.db.dates.full_date_now();
-        mdb.login.find({'user_id':username},function(err,data)
-                {
-                if (err) {
-                
-                        app.sendError(req,res,"Request error",err);
-                         }
-                else if(data.length>0){
-                     var  school = new mdb.school();
-                     console.log(body.school_code+"");
-                            school.collection.find({"school_code":body.school_code},function(err,dataarr){
-                                if(err){
-                                    app.sendError(req,res,"error",err);
-                                        }
-                                else
-                                        {
-                                            console.log(JSON.stringify(dataarr)+"");
-                                if(dataarr.length>0)
-                                         {
-                                        console.log("1")
-                                        app.sendError(req,res,"School already added!!","");
-                                        }
-                                else{
-                                    console.log("2")
-                                    school.collection.insert(body,function(err,data1){
-                                        if(err){
-                                                app.sendError(req,res,"error",err);           
-                                                }
-                                        else{
-                                          app.send(req,res,data1);        
-                                            }
-                                             });
-                                     }
-                                        }
-
-                                                                                             }); 
-                                    }
-                 });
-    });
-
-
- app.post('/api/add_schools/', function (req, res) {
-
-        var username = req.query.username;
-        var body  = req.body;
-        var full_date_obj = imports.db.dates.full_date_now();
-
-            mdb.login.find({'user_id':username},function(err,data)
-                {
-                if (err) {
-                
-                        app.sendError(req,res,"Request error",err);
-                         }
-                else if(data.length>0){
-
-                        var  school = new mdb.school();
-                        console.log({school_code:body.school_code}+"---------")
-                            school.collection.find({school_code:body.school_code},function(err,dataarr){
+    app.post('/api/add_schools/', function (req, res) {
+    var username = req.query.username;
+    var body  = req.body;
+    var school_code_ = body.school_code;
+    
+    var full_date_obj = imports.db.dates.full_date_now();
+    mdb.login.find({'user_id':username},function(err,data)
+    {
+        if (err) {
+         app.sendError(req,res,"Request error",err);
+     }
+     else if(data.length>0){
+       var  school = new mdb.school();
+       mdb.school.find({"school_code":school_code_},function(err,dataarr){
         if(err){
             app.sendError(req,res,"error",err);
         }
         else
         {
-              
-           
-
-            if(dataarr.length>0)
+           if(dataarr.length>0)
             {
                 console.log("1")
                 app.sendError(req,res,"School already added!!","");
@@ -91,26 +40,22 @@ module.exports = function(app) {
             else{
                 console.log("2")
                 school.collection.insert(body,function(err,data1){
-                                 if(err){
-                                       app.sendError(req,res,"error",err);           
-                                    }
-                                  else{
-                                    
-                                      app.send(req,res,data1);        
-                                    }
-                                 });
+                    if(err){
+                        app.sendError(req,res,"error",err);           
+                    }
+                    else{
+                      app.send(req,res,data1);        
+                  }
+              });
             }
         }
 
-        });
+    }); 
+   }
+});
+});
 
-                        }
 
-                else{
-                app.sendError(req,res,"No user found with this loginid!!",err);
-            }
-        });       
 
-        });
 
 }

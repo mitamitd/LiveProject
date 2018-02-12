@@ -4,6 +4,7 @@
 <md-progress-linear ng-show = "progress_bar_school" md-mode="indeterminate"></md-progress-linear>
 
 <span ng-show="isSchoolAdded">School Added successfully.</span>
+<span ng-show="errmsg">{{errmsg}}</span>
 <md-card ng-show = "!isSchoolAdded" style="margin:10px;">
 
 
@@ -30,7 +31,7 @@
 
 </div>
 
-<md-button class="md-raised md-primary" ng-click='add_schools()'>Add Schools</md-button>
+<md-button class="md-raised md-primary" ng-click='add_schools($event)'>Add Schools</md-button>
 </md-card>
 
 </div>

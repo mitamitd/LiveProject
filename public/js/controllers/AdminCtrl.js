@@ -1,5 +1,5 @@
 var app = angular.module('AdminCtrl',[])
-.controller('AdminCtrl', function($http,$scope, $rootScope,$location){
+.controller('AdminCtrl', function($http,$scope, $rootScope,$location,commonservice,webapis){
 
 $scope.school_details = {
 	"school_name": "",
@@ -9,20 +9,20 @@ $scope.school_details = {
 }
 $scope.isSchoolAdded = false;
 $scope.progress_bar_school = false;
-$scope.add_schools = function(){
-	var apiUrl = "https://mycirculateitround.herokuapp.com/api/add_schools/?";
+$scope.errmsg = false;
+$scope.add_schools = function(ev){
+    var apiUrl = webapis.getUrlForAddSchool($rootScope.userinfo.info.user_id);
 	$scope.progress_bar_school = true;
-	$http.post(apiUrl,$scope.school_details)
+  	$http.post(apiUrl,$scope.school_details)
           .then(function(response) {
-          	alert('response'+response.data);
-            var serverResponse = response.data;
-            if(serverResponse.status){
-            $scope.isSchoolAdded = true;
             $scope.progress_bar_school = false;
+            var serverResponse = response.data;
+            if(serverResponse.status=="success"){
+            $scope.isSchoolAdded = true;
             }
             else
             {
-                alert(serverResponse.msg+"");
+                commonservice.showAlert(ev,serverResponse.msg+"");
             }
     });
 };

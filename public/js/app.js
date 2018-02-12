@@ -4,6 +4,8 @@ angular.module('myApp', [
     'ngRoute',
     'ngAria',
     'ngAnimate',
+    'CommonService',
+    'WebApi',
     'AttendanceView',
     'AttendanceReport',
     'LoginForm',

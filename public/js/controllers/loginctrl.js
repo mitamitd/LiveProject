@@ -1,7 +1,5 @@
 var app = angular.module('LoginForm',[]);
 
-
-
 app.controller('Ctrl', function($scope, $rootScope,$location,$http,authSvc){
   $scope.vm = {
       formData: {
@@ -10,12 +8,10 @@ app.controller('Ctrl', function($scope, $rootScope,$location,$http,authSvc){
       }
   };
 
-
+        $rootScope.isLogin = false;
         $scope.msg = 'Please login!';
-        
         $rootScope.isLogin = false
         $scope.login = function(){
-
             if ($scope.vm.formData.email == ''){
                 $scope.msg = 'Please Enter Username!'
                 return;}
@@ -42,39 +38,5 @@ app.controller('Ctrl', function($scope, $rootScope,$location,$http,authSvc){
           }
 
 
-
-
-
-  $rootScope.isLogin = false;
-
-var download = function(){
-  console.log("hgiing");
-  var apiUrl = "http://localhost:8080/api/downloadexcel/";
-  $http.get(apiUrl)
-          .then(function(response) {
-            alert(response.data+"");
-          });
-}
-
-
-
-
-  $scope.vm.submit = function(){
-  var apiUrl = "https://mycirculateitround.herokuapp.com/api/login/?username="+$scope.vm.formData.email+"&password="+$scope.vm.formData.password;
-        $http.get(apiUrl)
-          .then(function(response) {
-        var serverResponse = response.data;
-        if(serverResponse.status){
-        $rootScope.userinfo1 = serverResponse.data;
-      }
-      else 
-      {
-
-      }
-    });
-  } 
-
-
-  //alert($rootScope.userinfo.info);
-
+  
 });

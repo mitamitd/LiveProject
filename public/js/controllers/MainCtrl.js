@@ -1,7 +1,7 @@
 var app=angular.module('MainCtrl', []);
 //session localstorage socket
 app.factory('authSvc',
-        function($http, $q, $window, $rootScope) {
+        function($http, $q, $window, $rootScope,webapis) {
             self = this
             self.userinfo = null
             storage_key = 'school-project-userinfo'
@@ -53,8 +53,9 @@ app.factory('authSvc',
               }
             self.login = function(username, password) {
                 deferred = $q.defer()
-                
-                $http.get("https://mycirculateitround.herokuapp.com/api/login/?username="+username+"&password="+password+"&source=WEB")
+                var url = webapis.getLoginUrl(username,password);
+                alert(url);
+                $http.get(url)
                 .success(function(result){
                     if (result.isError){
                       console.log('login error')
@@ -81,17 +82,7 @@ app.factory('authSvc',
 );
 
 app.controller('MainController', function($scope, $rootScope,$http,$location,authSvc) {
-  /*$rootScope.userinfo = {
-    "info" : {
-  "first_name":""
-}
-  }
-    $scope.userinfo = {
-        username : $rootScope.userinfo.info.first_name,
-        class:$rootScope.userinfo.info.class
-    };
-    $rootScope.userinfo.info.first_name = "";*/
-    
+  
 this.settings = {
       printLayout: true,
       showRuler: true,
