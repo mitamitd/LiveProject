@@ -55,7 +55,16 @@ module.exports = function(app) {
 });
 });
 
-
+app.get('/api/get_all_schools/', function (req, res) {
+      mdb.school.find({},function(err,data){
+              if(err){
+                app.sendError(req,res,"error",err);
+              }else{
+                app.send(req,res,data);
+              }
+          });
+    
+});
 
 
 }

@@ -27,4 +27,22 @@ $scope.add_schools = function(ev){
     });
 };
 
+    $scope.allSchools  = []
+$scope.getAllSchools = function()
+{
+    var apiUrl = webapis.getAllSchools($rootScope.userinfo.info.user_id);
+    $scope.progress_bar_school = true;
+$http.get(apiUrl).then(function(response){
+    var schools = response.data;
+             if(schools.status){
+                $scope.allSchools = schools.data;
+                $scope.progress_bar_school = false;
+             }
+             else{
+                commonservice.showAlert(ev,schools.msg+"");
+             }
+});
+    
+}
+$scope.getAllSchools();
 });

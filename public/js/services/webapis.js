@@ -47,6 +47,11 @@ this.getUrlForAddSchool = function(username){
  return url;  
 }
 
+this.getAllSchools = function(username){
+  var url = this.baseUrl+"/api/get_all_schools/?username="+username;
+  return url;
+}
+
 
 
 

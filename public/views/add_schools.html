@@ -7,6 +7,24 @@
 <span ng-show="errmsg">{{errmsg}}</span>
 <md-card ng-show = "!isSchoolAdded" style="margin:10px;">
 
+<div>
+<table cellpadding="10" padding='10'>
+  <tr style="color: #607D8B;">
+    <th >School Name</th>
+    <th>School Code</th>
+    <th>Head School Name</th>
+    <th>Head School Code</th>
+  </tr>
+  <tr ng-repeat="school in allSchools">
+    
+    <td>{{ school.school_name }}</td>
+    <td>{{ school.school_code }}</td>
+    <td>{{ school.head_school_name }}</td>
+    <td>{{ school.head_school_code }}</td>
+
+  </tr>
+</table>
+</div>
 
 <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
