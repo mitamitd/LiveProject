@@ -52,7 +52,10 @@ this.getAllSchools = function(username){
   return url;
 }
 
-
-
+/* ---Add Classes*/
+this.getAllClassesOfSchool = function(username,school){
+  var url = this.baseUrl+"/api/get_all_classes/?username="+username+"&school="+school;
+  return url;
+}
 
 });

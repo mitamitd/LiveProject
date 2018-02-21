@@ -23,7 +23,6 @@ app.factory('authSvc',
                     designation:data.designation,
                     user_type:data.user_type,
                     info:data
-
                 }
                 
                 console.log('authicated login1')
@@ -54,7 +53,7 @@ app.factory('authSvc',
             self.login = function(username, password) {
                 deferred = $q.defer()
                 var url = webapis.getLoginUrl(username,password);
-                alert(url);
+                
                 $http.get(url)
                 .success(function(result){
                     if (result.isError){

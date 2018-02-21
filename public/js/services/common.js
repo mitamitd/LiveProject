@@ -25,7 +25,18 @@ app.service('commonservice', function($mdDialog) {
         .targetEvent(ev)
     );
   };
-
+this.showAlert = function(description) {
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(true)
+        .title("Alert Dialog")
+        .textContent(description)
+        .ariaLabel('Alert Dialog')
+        .ok('Ok Got it!!')
+        .targetEvent()
+    );
+  };
 
    
 });

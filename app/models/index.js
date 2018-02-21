@@ -20,6 +20,17 @@ config.school = mongoose.model('schools',{
     head_school_code:{type : String}
 })
 
+
+config.class_master = mongoose.model('classes_masters',{
+	class_name:{type : String},
+	class_code:{type : String},
+	school_name:{type : String},
+    school_code:{type : String}
+})
+
+
+/*---------------Extras------------------*/
+
 config.protection = mongoose.model('protections', {
 user_id : {type : String, default: ''},
 key : {type : String, default: ''}

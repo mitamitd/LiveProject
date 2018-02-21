@@ -66,5 +66,17 @@ app.get('/api/get_all_schools/', function (req, res) {
     
 });
 
+app.get('/api/get_all_classes/', function (req, res) {
+      var school = req.query.school;
+      mdb.class_master.find({school_code:school},function(err,data){
+              if(err){
+                app.sendError(req,res,"error",err);
+              }else{
+                app.send(req,res,data);
+              }
+          });
+    
+});
+
 
 }

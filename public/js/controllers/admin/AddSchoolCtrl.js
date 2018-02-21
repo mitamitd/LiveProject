@@ -1,5 +1,5 @@
-var app = angular.module('AdminCtrl',[])
-.controller('AdminCtrl', function($http,$scope, $rootScope,$location,commonservice,webapis){
+var app = angular.module('AddSchoolCtrl',[])
+.controller('AddSchoolCtrl', function($http,$scope, $rootScope,$location,commonservice,webapis){
 
 $scope.school_details = {
 	"school_name": "",
@@ -10,6 +10,7 @@ $scope.school_details = {
 $scope.isSchoolAdded = false;
 $scope.progress_bar_school = false;
 $scope.errmsg = false;
+$scope.enableSchoolList = false;
 $scope.add_schools = function(ev){
     var apiUrl = webapis.getUrlForAddSchool($rootScope.userinfo.info.user_id);
 	$scope.progress_bar_school = true;
@@ -45,4 +46,14 @@ $http.get(apiUrl).then(function(response){
     
 }
 $scope.getAllSchools();
+
+$scope.isenableSchoolList = true;
+
+$scope.enableSchoolList = function(value){
+  $scope.isenableSchoolList = value;
+}
+
+
+
+
 });

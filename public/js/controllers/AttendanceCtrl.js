@@ -1,5 +1,5 @@
 var app = angular.module('AttendanceView',[])
-.controller('AttendanceController', function($http,$scope, $rootScope,$location,webapis){
+.controller('AttendanceController', function($http,$scope, $rootScope,$location,commonservice,webapis){
 $scope.userinfo = $rootScope.userinfo.info.class_code;
 $scope.teacherclasses = "";
 var currDate = new Date();
@@ -31,12 +31,12 @@ $scope.submit = function(){
   }
 
 
-$scope.checkForAttendance = function()
+$scope.checkForAttendance = function(ev)
 {
   $scope.msg = "";
   if($scope.teacherclasses== "")
   {
-    alert("Please select class first");
+    commonservice.showAlert(ev,"Please select class first");
     return;
   }
   $scope.attDataLoaded = false;

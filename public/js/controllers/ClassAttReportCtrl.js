@@ -23,11 +23,7 @@ app.controller('ClassAttReportController', function($http,$scope, $rootScope,$lo
     var classAttData = [];
 
    
-    $scope.datadetail = function()
-    {
-        alert(JSON.stringify($rootScope.userinfo.info)+"")
-    }
-    $scope.datadetail();
+    
 	
     $scope.loadClassReport = function(ev)
 	{

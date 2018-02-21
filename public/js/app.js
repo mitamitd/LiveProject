@@ -10,7 +10,8 @@ angular.module('myApp', [
     'AttendanceReport',
     'LoginForm',
     'MainCtrl',
-    'AdminCtrl'
+    'AddSchoolCtrl',
+    'AddClassCtrl'
 ])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider,authSvc) {
@@ -42,8 +43,11 @@ angular.module('myApp', [
             templateUrl: 'views/class_attendance_report.html',
             controller: 'ClassAttReportController'
         }).when('/add_schools', {
-            templateUrl: 'views/add_schools.html',
-            controller: 'AdminCtrl'
+            templateUrl: 'views/admin/add_schools.html',
+            controller: 'AddSchoolCtrl'
+        }).when('/add_classes', {
+            templateUrl: 'views/admin/add_classes.html',
+            controller: 'AddClassCtrl'
         });
 
     $locationProvider.html5Mode(true);
