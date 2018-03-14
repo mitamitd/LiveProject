@@ -11,7 +11,9 @@ angular.module('myApp', [
     'LoginForm',
     'MainCtrl',
     'AddSchoolCtrl',
-    'AddClassCtrl'
+    'AddClassCtrl',
+    'AddUsersCtrl',
+    'AddStudentsCtrl'
 ])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider,authSvc) {
@@ -48,7 +50,13 @@ angular.module('myApp', [
         }).when('/add_classes', {
             templateUrl: 'views/admin/add_classes.html',
             controller: 'AddClassCtrl'
-        });
+        }).when('/add_users', {
+            templateUrl: 'views/admin/add_users.html',
+            controller: 'AddUsersCtrl'
+        }).when('/add_students', {
+        templateUrl: 'views/admin/add_students.html',
+        controller: 'AddStudentsCtrl'
+    });
 
     $locationProvider.html5Mode(true);
 

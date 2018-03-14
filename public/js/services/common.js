@@ -38,5 +38,19 @@ this.showAlert = function(description) {
     );
   };
 
+this.showConfirmAlert = function(content,okbuttontext,cancelbuttontext,okfun,cancelfun){
+var confirm = $mdDialog.confirm()
+          .title('Alert Dialog')
+          .textContent(content)
+          .ariaLabel('Alert Dialog')
+          .ok(okbuttontext)
+          .cancel(cancelbuttontext);
+          $mdDialog.show(confirm).then(function() {
+                okfun();
+                }, 
+                function() {
+                    cancelfun();
+                });
+}
    
 });

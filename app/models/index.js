@@ -28,6 +28,11 @@ config.class_master = mongoose.model('classes_masters',{
     school_code:{type : String}
 })
 
+config.user_direction = mongoose.model('user_directions',{
+    
+})
+
+
 
 /*---------------Extras------------------*/
 

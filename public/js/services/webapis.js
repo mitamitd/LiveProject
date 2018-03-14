@@ -58,4 +58,28 @@ this.getAllClassesOfSchool = function(username,school){
   return url;
 }
 
+this.getAddClassUrl = function(username){
+  var url = this.baseUrl+"/api/get_add_class_url/?username="+username;
+  return url;
+}
+
+/*---------Add Users------------*/
+this.getAllUsersOfSchool = function(username,school){
+  var url = this.baseUrl+"/api/get_all_user_url/?username="+username+"&school="+school;
+  return url;
+}
+  this.addUserToDBUrl = function(username){
+    var url = this.baseUrl+"/api/add_user_url/?username="+username;
+    return url;
+  }
+
+
+/*------Add Student---------*/
+  this.getAllStudentsOfSchoolAndClass = function(username,school,class_code){
+    var url = this.baseUrl+"/api/get_all_student_of_school_and_classes/?username="+username+"&school="+school+"&class_code="+class_code;
+    return url;
+  }
+
+
+
 });

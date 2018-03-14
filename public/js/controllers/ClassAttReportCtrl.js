@@ -27,17 +27,15 @@ app.controller('ClassAttReportController', function($http,$scope, $rootScope,$lo
 	
     $scope.loadClassReport = function(ev)
 	{
-        alert(JSON.stringify($rootScope.userinfo)+"");
+        
         if($scope.teacherclasses=="")
         {
            commonservice.showAlert(ev,"Alert Dialog","Please select class first!!","Ok Got it!");
-          // alert("Please select class first!!");
             return;
         }
         $scope.classAttLoaded = false;
         var apiUrl = webapis.getUrlForClassAttDateRange($rootScope.userinfo.info.user_id,$rootScope.userinfo.info.school_code,$scope.teacherclasses,sdate,edate);
-		//var apiUrl = commonservice.getBaseUrl()+"/api/getClassAtt/?username="+$rootScope.userinfo.info.user_id+"&school_code="+$rootScope.userinfo.info.school_code+"&class_code="+$scope.teacherclasses+"&sdate="+sdate+"&edate="+edate;
-        $http.get(apiUrl)
+		$http.get(apiUrl)
           .then(function(response) {
                 var attRes = response.data;
                 if(attRes.status){
@@ -45,7 +43,6 @@ app.controller('ClassAttReportController', function($http,$scope, $rootScope,$lo
                         {
                         classAttData = attRes.data;
                         var apiClassStudents = webapis.getUrlForStudentOfClass($scope.teacherclasses,$rootScope.userinfo.info.school_code);
-                        //var apiClassStudents = commonservice.getBaseUrl()+"/api/getClassStudents/?class_code="+$scope.teacherclasses+"&school_code="+$rootScope.userinfo.info.school_code;  
                         $http.get(apiClassStudents)
                         .then(function(response1) {
                             var studentData = response1.data;
@@ -59,24 +56,24 @@ app.controller('ClassAttReportController', function($http,$scope, $rootScope,$lo
                                     }
                                     else
                                     {
-                                        alert("No student found of this class!!");
+                                        commonservice.showAlert("No student found of this class!!");
                                     }
                                 }
                                 else
                                 {
-                                    alert(studentData.msg+"");
+                                    commonservice.showAlert(studentData.msg+"");
                                 }
                             });
                         }
                         else{
                             $scope.allStudents = [];
                             $scope.classAttLoaded = true;
-                             alert("No any attendance of this class found!!");
+                             commonservice.showAlert("No any attendance of this class found!!");
                             }
                     }
                     else 
                         {
-                        alert("working5")
+                        commonservice.showAlert("working5")
                         }
                 });
 	}

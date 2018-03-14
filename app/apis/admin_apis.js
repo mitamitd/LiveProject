@@ -34,11 +34,9 @@ module.exports = function(app) {
         {
            if(dataarr.length>0)
             {
-                console.log("1")
                 app.sendError(req,res,"School already added!!","");
             }
             else{
-                console.log("2")
                 school.collection.insert(body,function(err,data1){
                     if(err){
                         app.sendError(req,res,"error",err);           
@@ -78,5 +76,126 @@ app.get('/api/get_all_classes/', function (req, res) {
     
 });
 
+app.post('/api/get_add_class_url/',function(req,res){
+            var query = {
+              class_name:req.body.class_name,
+              section:req.body.section,
+              school_code:req.body.school_code
+            }
+
+            mdb.class_master.find(query,function(err,data){
+                  if(err){
+                    app.sendError(req,res,"error",err);
+                  }
+                  else{
+                    if(data.length>0){
+                   app.sendError(req,res,"Class already added",err);   
+                    }
+                    else{
+                          query.class_code = req.body.class_name + req.body.section;
+                          query.school_name = req.body.school_name;
+                          console.log(query+"");
+                          var class_master = new mdb.class_master();
+                          class_master.collection.insert(query,function(err,data){
+                            if(err){
+                              app.sendError(req,res,"Error!!",err); 
+                            }
+                            else{
+                              app.send(req,res,data);
+                            }
+                          });
+                  }
+                  }
+            });
+
+});
+
+
+
+app.get('/api/get_all_user_url/', function (req, res) {
+      var school = req.query.school;
+    var class_code = req.query.class_code;
+      mdb.user.find({school_code:school,class_code:class_code},function(err,data){
+              if(err){
+                app.sendError(req,res,"error",err);
+              }else{
+                app.send(req,res,data);
+              }
+          });
+    
+});
+
+    app.get('/api/get_all_student_of_school_and_classes/', function (req, res) {
+        var school = req.query.school;
+        var class_code = req.query.class_code;
+        mdb.user.find({school_code:school,"user_type": "student",class_code:class_code},function(err,data){
+            if(err){
+                app.sendError(req,res,"error",err);
+            }else{
+                app.send(req,res,data);
+            }
+        });
+
+    });
+
+
+
+
+
+app.post('/api/add_user_url/',function(req,res){
+
+  var body = req.body;
+  body.class_code = body.class_name+body.section;
+  if(body.user_type=='teacher')
+  {
+    body.class_code = [body.class_name+body.section+""];
+  }
+
+
+  mdb.user_direction.find(
+    {'user_type':body.user_type,'class_code':body.class_code,"school_code":body.school_code},function(err,data){
+     /* if(body.roll_no.length<2)
+        body.roll_no = "0"+body.roll_no;
+      console.log(data[0].school_id+body.roll_no)*/
+      app.send(req,res,{'user_type':body.user_type,'class_code':body.class_code,"school_code":body.school_code});
+    }
+    );
+
+
+
+
+  /*var user = new mdb.user();
+  user.collection.insert(body,function(err,data){
+    if(err){
+      app.sendError(req,res,JSON.stringify(err),err); 
+    }else{
+
+
+        var login = new mdb.login();
+        var logindata = {
+          "user_id": body.user_id,
+          "password": body.user_id+"@123",
+          "enabled": "true"
+        }
+
+        login.collection.insert(logindata,function(err,data1){
+              if(err)
+              {
+                app.sendError(req,res,err,err);
+              }
+              else
+              {
+              app.send(req,res,data1);
+              }          
+        });
+
+
+    }
+
+  });*/
+
+
+
+});
 
 }

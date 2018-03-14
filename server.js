@@ -59,9 +59,9 @@ app.get('*',function(req,res){
 //        }
 //    })
 //});
-app.get('/nerds',function(req,res){
-  res.sendfile('./public/views/nerd.html');
-});
+/*app.get('/nerds',function(req,res){
+  res.sendfile('./public/views/nerd1.html');
+});*/
 
 
 // routes ==================================================

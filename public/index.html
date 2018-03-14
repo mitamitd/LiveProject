@@ -36,15 +36,14 @@
   <script src="js/services/common.js"></script>  
   <script src="js/services/webapis.js"></script>
 	<script src="js/controllers/MainCtrl.js"></script>
-	<script src="js/controllers/NerdCtrl.js"></script>
-	<script src="js/services/NerdService.js"></script>
-	<script src="js/controllers/GeekCtrl.js"></script>
-	<script src="js/services/GeekService.js"></script>
+
 	<script src="js/controllers/loginctrl.js"></script>
 	<script src="js/controllers/AttendanceCtrl.js"></script>
   <script src="js/controllers/ClassAttReportCtrl.js"></script>
   <script src="js/controllers/admin/AddSchoolCtrl.js"></script>
   <script src="js/controllers/admin/AddClassCtrl.js"></script>
+  <script src="js/controllers/admin/AddUsersCtrl.js"></script>
+  <script src="js/controllers/admin/AddStudentCtrl.js"></script>
 
 
 
@@ -68,7 +67,7 @@
   
 <div  ng-show="isLogin" class="col-xs-12 col-sm-12 col-md-2 pull-left" id="apptheme">
 <md-menu-bar>
-    <md-menu >
+  <md-menu >
             <button  ng-click="$mdOpenMenu()">
               Attendance
             </button>
@@ -87,7 +86,7 @@
 
               </md-menu>
 
-              <md-menu >
+  <md-menu >
             <button  ng-click="$mdOpenMenu()">
               Admin Panel
             </button>
@@ -102,10 +101,21 @@
                   Add Classes
                 </md-button>
               </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="addUsers()">
+                  Add users
+                </md-button>
+              </md-menu-item>
+
+              <md-menu-item>
+                <md-button ng-click="addStudents()">
+                  Add students
+                </md-button>
+              </md-menu-item>
               </md-menu-content>
               
               </md-menu>
-              </md-menu-bar>
+</md-menu-bar>
 </div>
 
 <div  style="background-color: #fff;">

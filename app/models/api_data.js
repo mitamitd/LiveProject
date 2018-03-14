@@ -72,7 +72,7 @@ app.get('/api/load_data/', function (req, res) {
         var username = req.query.username;
         var class_code= req.query.class_code;
         var school_code= req.query.school_code;
-        mdb.user.find({'class_code':class_code,'school_code':school_code,'roll_type': 'student'},function(err,data){
+        mdb.user.find({'class_code':class_code,'school_code':school_code,'user_type': 'student'},function(err,data){
                         if(data.length>0)
                              {
                              data = new app.getDataInFormat1(data);
@@ -186,7 +186,7 @@ app.get('/api/checkingdate/', function (req, res) {
 app.get('/api/getClassStudents/', function (req, res) {
     var class_code = req.query.class_code;
     var school_code  = req.query.school_code;
-    mdb.user.find({"roll_type":"student","class_code":class_code,"school_code": school_code},function(err,data){
+    mdb.user.find({"user_type":"student","class_code":class_code,"school_code": school_code},function(err,data){
         if(err){
             app.sendError(req,res,"No Data found",err);
         }

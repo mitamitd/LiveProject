@@ -111,7 +111,13 @@ this.settings = {
     $scope.addClasses = function(){
      $location.path('/add_classes'); 
     }
-    
+    $scope.addUsers = function(){
+     $location.path('/add_users'); 
+    }
+
+    $scope.addStudents = function(){
+        $location.path('/add_students');
+    }
     
 
 	$scope.tagline = 'To the moon and back!';
