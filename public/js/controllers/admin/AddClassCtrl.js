@@ -14,8 +14,7 @@
   $scope.allSections = ["A","B","C","D","E","F"];
   $scope.listOfClasses = ["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th","11th","12th"];
 
-
-    $scope.allClasses  = []
+   $scope.allClasses  = []
   $scope.getAllClassesOfSchool = function()
   {
     var apiUrl = webapis.getAllClassesOfSchool($rootScope.userinfo.info.user_id,$scope.selected_school);

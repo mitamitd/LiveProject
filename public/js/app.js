@@ -34,9 +34,9 @@ angular.module('myApp', [
                     var userinfo = authSvc.getUserInfo()
                 $rootScope.userinfo = userinfo
                 if(userinfo)
-                {
+                    {
                     $rootScope.isLogin = true;
-                }
+                    }
                 }
                 ]
                 

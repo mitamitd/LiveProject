@@ -252,11 +252,6 @@ app.post('/api/add_schools1/', function (req, res) {
                  });
     });
 
-
-
-
-
-
 }
 
 
@@ -268,6 +263,7 @@ var sendUserInfo = function(req,res,sessionID,username){
                      data = new app.getDataInFormat(data);
                        data.sessionID = sessionID;
                       return app.send(req,res,data);
+//                        return app.send(req,res,{username:"smt01"});
                   }
           else
                   {
