@@ -1,0 +1,41 @@
+<div   class="jumbotron" class="md-padding" ng-cloak layout="column" style="background-color: #FFF">
+	<p align="center" style="color: #607D8B">Mark Attendance</p>
+	<span style="color: #607D8B"><b>Select Class :- </b>  <md-input-container>
+          <label>Class</label>
+          <md-select ng-model="teacherclasses">
+            <md-option ng-repeat="class in userinfo" ng-value="teacherclasses = class" >
+              {{class}}
+            </md-option>
+          </md-select>
+        </md-input-container> 
+        <md-button class="md-raised md-primary" ng-click='checkForAttendance($event)'>Load</md-button>
+</span>
+<md-progress-linear ng-hide = "attDataLoaded" md-mode="indeterminate"></md-progress-linear>
+<span ng-show="isAttMarked">Class attendance mark successfully.</span>
+<span ng-show="isAttAlreadyMark">Class attendance already marked!!</span>
+<span >{{msg}}</span>
+<md-card ng-show = "isAttMarkReq">
+<table cellpadding="10" padding='10'>
+	<tr style="color: #607D8B">
+		<th >Roll no</th>
+		
+		<th>Name</th>
+		
+		<th>Attendance</th>
+	</th>
+  <tr ng-repeat="x in students">
+  	
+    <td>{{ x.rollno }}</td>
+    
+    <td>{{ x.first_name }}</td>
+    
+    <td><md-input-container style="margin-right: 10px;">
+       <md-select ng-init = "x.att = attOp" ng-model="x.att">
+          <md-option ng-repeat="attOpt in attOption" value="{{attOpt}}">{{attOpt}}</md-option>
+        </md-select>
+      </md-input-container></td>
+  </tr>
+</table>
+<md-button class="md-raised md-primary" ng-click='submit()'>Submit</md-button>
+	</md-card>
+</div>

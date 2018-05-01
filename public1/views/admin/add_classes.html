@@ -1,0 +1,94 @@
+<div   class="jumbotron" class="md-padding" ng-cloak layout="column" style="background-color: #FFF">
+
+
+<section layout="row" layout-sm="column" layout-align="left center" layout-wrap>
+<md-button class="md-raised md-primary" ng-click="enableClassList(false)">Add class</md-button>
+</section>
+
+
+<p align="center" style="color: #607D8B">Class</p>
+
+<span style="color: #607D8B" ng-show="isenableClassList"><b>Select School :- </b>  <md-input-container>
+          <md-input-container>
+          <label>School</label>
+          <md-select ng-model="selected_school">
+            <md-option ng-repeat="school in allSchools" ng-value="selected_school = school.school_code" >
+              {{school.school_name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-button class="md-raised md-primary" ng-click='getAllClassesOfSchool()'>Load</md-button>
+</span>
+
+<md-progress-linear ng-show = "progress_bar_school" md-mode="indeterminate"></md-progress-linear>
+
+<span ng-show="isClassAdded">Class Added successfully.</span>
+<span ng-show="errmsg">{{errmsg}}</span>
+<md-card ng-show = "!isSchoolAdded" style="margin:10px;">
+
+<div ng-show="isenableClassList">
+<table cellpadding="10" padding='10'>
+  <tr style="color: #607D8B;">
+    <th >Class Name</th>
+    <th >Class Section</th>
+    <th>Class Code</th>
+    <th>School Name</th>
+    <th>School Code</th>
+  </tr>
+  <tr ng-repeat="class in allClasses">
+    
+    <td>{{ class.class_name }}</td>
+    <td>{{ class.section }}</td>
+    <td>{{ class.class_code }}</td>
+    <td>{{ class.school_name }}</td>
+    <td>{{ class.school_code }}</td>
+
+  </tr>
+</table>
+</div>
+
+<div ng-show="!isenableClassList">
+<div layout-gt-sm="row" >
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Class Name</label>
+            <md-select ng-model="class_details.class_name">
+            <md-option ng-repeat="class in listOfClasses" ng-value="class" >
+              {{class}}
+            </md-option>
+          </md-select>
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Class Section</label>
+            <md-select ng-model="class_details.section">
+            <md-option ng-repeat="section in allSections" ng-value="section" >
+              {{section}}
+            </md-option>
+          </md-select>
+          </md-input-container>
+
+            
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>School Name</label>
+            <md-select ng-model="selected_school_obj" ng-change="setSchoolName()">
+            <md-option ng-repeat="school in allSchools"  ng-value="school" >
+              {{school.school_name}}
+            </md-option>
+          </md-select>
+          </md-input-container>
+
+          
+
+</div>
+
+  <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+<md-button class="md-raised md-primary"   ng-click='addClass()'>Submit</md-button>
+</section>
+<section layout="row" layout-sm="column" layout-align="end center" layout-wrap>
+  <md-button class="md-raised md-primary" ng-click="enableClassList(true)">Back</md-button>
+</section>
+<div>
+
+</md-card>
+
+</div>

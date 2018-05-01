@@ -6,7 +6,7 @@ modules = {};
 
 //modules.configs = require('configs');
 modules.app = require('../imapp');
-modules.db = require('mdb');
+modules.db = require('../mdb');
 // modules.db = require('mysqldb');
 
 modules.get_f = function(Path_Prefix){

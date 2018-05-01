@@ -1,17 +1,35 @@
 /**
- * Created by SanJeev on 23-06-2017.
+ * Created by chirag on 29/06/15.
  */
 
-
-const config =  require('../config');
-var mdb = require('mongojs');
-//var moment = require('moment');
-
-db = {};
-db.mdb = mdb(config.mongodburl);
-console.log("Connected MongoDB at ",config.mongodburl);
+/*
+var _db = require('./_db.js');
+*/
+//var _sqldb = require('./_sqldb.js');
 
 
+//var mongojs = require('mongojs');
+//var configs = require('configs');
+//
+//console.log('Connecting mongodb to: ' + configs.mongodb);
+//
+//var db = mongojs(configs.mongodb);
+//db.mdb = db;
+
+var db = {};
+/*
+db.mdb = _db;
+*/
+//db.msdb = _sqldb;
+
+//Setup Easy Collections:
+//db.logins = db.mdb.collection('logins');
+//db.projects = db.mdb.collection('projects');
+//db.clients = db.mdb.collection('clients');
+//db.agents = db.mdb.collection('agents');
+// db.field_users = db.mdb.collection('field_users');
+//db.users = require('./collections/users.js');
+var moment = require('moment');
 db.dates = {};
 db.dates.full_date = function(_datetime) {
     now_obj = {};
@@ -23,13 +41,19 @@ db.dates.full_date = function(_datetime) {
     now_obj.date = _date.getTime();
     now_obj.datejs = _date;
     now_obj.datetimejs = _datetime;
-   // console.log("working ------------"+moment(new Date()).format("YYYY-MM-DD"));
-    //now_obj.date_YYYYMMDD = _datetime.getFullYear()+((_datetime.getMonth()>9 ? '' : '0') + _datetime.getMonth())+((_datetime.getDate()>9 ? '' : '0') + _datetime.getDate());
-    now_obj.month = _datetime.getMonth()+1;
+    now_obj.date_YYYYMMDD = moment(_datetime).format("YYYY-MM-DD");
+    now_obj.month = _datetime.getMonth();
     now_obj.year = _datetime.getFullYear();
     now_obj.day = _datetime.getDate();
     return now_obj;
 };
+
+db.dates.currmilli = function(_datetime){
+    _datetime = new Date(_datetime);
+    var _date = new Date(_datetime.getFullYear(), _datetime.getMonth(), _datetime.getDate());
+    _date.setTime( _date.getTime() - _date.getTimezoneOffset()*60*1000 );
+    return _date.getTime();
+}
 
 db.dates.full_date_now = function() {
     return db.dates.full_date(new Date());
@@ -58,7 +82,9 @@ db.dates.formatDate = function(date) {
     //if (day.length < 2) day = '0' + day;
     return [year, month, day].join('-');
 }
-
+db.dates.format_YYYYMMDD_date = function(date) {
+return moment(date).format("YYYY-MM-DD");
+}
 
 db.dates.getDates = function(startDt, endDt) {
     var error = ((db.dates.isDate(endDt)) && (db.dates.isDate(startDt)) && db.dates.isValidRange(startDt, endDt)) ? false : true;
@@ -93,7 +119,4 @@ db.array.sortArray = function(arr,property){
     return arr;
 }
 
-
-
-Object.freeze(db);
 module.exports = db;

@@ -2,19 +2,10 @@
  * Created by Amit on 6/14/2017.
  */
 
-var mdb = require('../models/index');
+var mdb = require('../models/bear');
 //var admin_apis = require('../apis/admin_apis')
-var shortid = require('shortid');
-var imports = require('../custom_modules/imports');
-var moment = require('moment');
-module.exports = function(app) {
-    app.use(function (req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Username, SourceKey");
-        next();
-    });
-}
+var imports = require('../custom_modules/imports/index');
+
 
 module.exports = function(app) {
      app.get('/viewdata/', function (req, res) {
@@ -41,15 +32,19 @@ app.get('/api/login/', function (req, res) {
             else if(data.length>0){
               data = new app.getDataInFormat(data);
                if(data.password==password){
-                    console.log("success login");
                     var sessionID = app.getSessionId();
-                    mdb.login.update({user_id:username}, { $set:{key:sessionID}}, {upsert:true}, function(err, doc){
+                   console.log("success login"+" "+sessionID);
+                    mdb.user.update({user_id:username}, { $set:{key:sessionID}}, {upsert:true}, function(err, doc){
                         console.log("success login1");
                         if (err) {  
                                 return app.sendError(req,res,"Error in updating Session",err);
                                 }
-                                console.log(JSON.stringify(doc)+"logins response");
-                                sendUserInfo(req,res,sessionID,username);
+                        else {
+                            console.log(JSON.stringify(doc) + "logins response");
+                            //app.send(req, res, doc);
+                            sendUserInfo(req,res,sessionID,username);
+                        }
+
                               });
 
                     }
@@ -260,8 +255,8 @@ var sendUserInfo = function(req,res,sessionID,username){
         mdb.user.find({'user_id':username},function(err,data){
             if(data.length>0)
                     {
-                     data = new app.getDataInFormat(data);
-                       data.sessionID = sessionID;
+/*                     data = new app.getDataInFormat(data);
+                       data.sessionID = sessionID;*/
                       return app.send(req,res,data);
 //                        return app.send(req,res,{username:"smt01"});
                   }

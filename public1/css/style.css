@@ -1,0 +1,68 @@
+body { padding-top:30px; }
+@import url('//ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css');
+.login-form {
+  md-card {
+    padding: 0!important;
+
+    md-card-title {
+      background-color: #009688;
+    }
+  }
+}
+.container{
+  padding: 0px;
+  width:100%;
+}
+
+th, td {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+th{
+  padding-top: 20px;
+}
+h3{
+  text-align: right;
+  margin-left: -523px;
+  float:right;
+  font-size: 20px;
+
+}
+
+.menuBardemoBasicUsage .page-container {
+  padding: 32px; }
+.menuBardemoBasicUsage .page {
+  margin: 0 auto;
+  padding: 24px;
+  max-width: 680px;
+  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.25); }
+.menuBardemoBasicUsage .page h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: 0;
+  font-weight: normal; }
+.menuBardemoBasicUsage .page p {
+  line-height: 1.6rem; }
+#menubartitle{
+  margin-left: 450px;
+  color: #ffffff;
+}
+#menubar{
+  margin-left: 300px;
+}
+#apptheme{
+  background-color: #009688;
+  font-size: 20px;
+  color: #ffffff;
+}
+#margin_10{
+margin-left: 10px;
+}
+md-card.scroll {
+    background-color: #FFFFFF ;
+    width:800px;
+    height: 800px;
+    overflow-x: auto;
+    overflow-y:hidden;
+    white-space: nowrap;
+}
