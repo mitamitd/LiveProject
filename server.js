@@ -8,6 +8,7 @@ var app        = require('./app/custom_modules/imapp/index');
 var morgan     = require('morgan');
 var methodOverride = require('method-override')
 var _ = require('underscore');
+var alasql = require('alasql');
 // configure app
 // configuration ===========================================
 global.app = app;
@@ -79,7 +80,12 @@ app.get('*',function(req,res){
   //res.sendfile(path.join(__dirname + '/public/views/attendance.html'));
   res.sendfile('./public/index.html');
 });
+app.get('/api/work/',function(req,res){
+var rows = [{a:1, b:10, c:'One'}, {a:2, b:20, c:'Two'} ];
+     alasql('SELECT * INTO json("restest280b.json") FROM ?', [rows]);
+app.send(req,res,[]);
 
+});
 // REGISTER OUR ROUTES -------------------------------
 /*app.use('/api', router);
 */

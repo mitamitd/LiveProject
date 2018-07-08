@@ -11,6 +11,7 @@
   "author": "Chris Sevilleja <scotch.io>",
   "license": "MIT",
   "dependencies": {
+    "alasql": "^0.4.6",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "mdb": "^0.1.0",

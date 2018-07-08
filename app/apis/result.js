@@ -5,28 +5,73 @@ var async = require('async');
 var _ = require('underscore');
 
 module.exports = function(app) {
+
+    //----------------------Create new Exam------------------------------//
+    app.post('/api/create_new_exam/',function(req,res){
+        var exam = req.body;
+        var user_id = req.query.user_id;
+        var school_code = req.query.school_code;
+        
+        mdb.exam.find({"exam_name":exam.exam_name},function(err,data){
+                if(err){
+                   app.sendError(req,res,"Some problem occur!!",err); 
+                }else if(data.length>0){
+                    app.sendError(req,res,"Exam already added!!",err);
+                }
+                else{
+                    mdb.exam.update({school_code:school_code,is_active:"true"},{$set:{is_active:"false"}},function(err1,data1){
+                            if(err1){
+                                app.sendError(req,res,"",err1)
+                            }
+                             else {
+                                    var examobj = new mdb.exam();
+                                    examobj.collection.insert({"exam_name":exam.exam_name,updated_by:user_id,school_code:school_code,is_active:"true"},
+                                    function(err2,data2){
+                                            if(err2){
+                                                app.sendError(req,res,"Some Error occur!!",err2);
+                                            }
+                                            else{
+                                                
+                                                app.send(req,res,"Data inserted successfully");
+                                            }
+                                        }); 
+                                }
+
+                        });
+                   }
+                
+            });
+    
+    });
+
+
     //-----------------Create new Result--------------------//
     app.post('/api/create_result/', function (req, res) {
         var results=req.body;
+        var user_id = req.query.user_id;
+        var school_code = req.query.school_code;
+
         function getRandomNumber(obj) {
             return new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                    mdb.results.find({user_id:obj.user_id,class_code: obj.class_code}, function(err,data){
+                    mdb.results.find({user_id:obj.user_id,class_code: obj.class_code,school_code:school_code}, function(err,data){
                         if(data.length>0){
-                            mdb.results.find({user_id: obj.user_id,class_code: obj.class_code,"results.sub_code": obj.results[0].sub_code}, function(err1,data1){
+                            mdb.results.find({user_id: obj.user_id,class_code: obj.class_code,school_code:school_code,"results.sub_code": obj.results[0].sub_code}, function(err1,data1){
                                 var s=obj;
                                 if(data1.length>0){
-                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code,"results.sub_code": s.results[0].sub_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}  }, function(err3,data3){
+                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code,school_code:school_code,"results.sub_code": s.results[0].sub_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}  }, function(err3,data3){
                                         resolve()
                                     })
                                 }else{
-                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code},{$addToSet:{results: s.results[0]} }, function(err3,data3){
+                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code,school_code:school_code},{$addToSet:{results: s.results[0]} }, function(err3,data3){
                                         console.log(data3);
                                         resolve()
                                     })
                                 }
                             })
                         }else{
+                            obj['updated_by'] = user_id;
+                            obj['school_code'] = school_code;
                             var  resultsDb = new mdb.results();
                             resultsDb.collection.insert(obj, function(err1,data1){
                                 resolve()
@@ -47,8 +92,9 @@ module.exports = function(app) {
     app.get('/api/get_all_student_for_create_result', function (req, res) {
         var classCode = req.query.class;
         var subCode = req.query.subject;
+        var school_code = req.query.school_code;
 
-        mdb.user.find({class_code:classCode,user_type:"student"},function(err,data){
+        mdb.user.find({class_code:classCode,user_type:"student",school_code:school_code},function(err,data){
             if (err) {
                 res.send({"msg":"something went wrong"});
             }
@@ -67,7 +113,8 @@ module.exports = function(app) {
     app.get('/api/get_all_student_for_update_result', function (req, res) {
         var classCode = req.query.class;
         var subCode = req.query.subject;
-        mdb.results.find({"class_code":classCode,"results.sub_code":subCode},{"first_name":1,"results.$":1,"rollno":1,"user_id":1,"class_code":1},function(err,data){
+        var school_code = req.query.school_code;
+        mdb.results.find({"class_code":classCode,"results.sub_code":subCode,school_code:school_code},{"first_name":1,"results.$":1,"rollno":1,"user_id":1,"class_code":1},function(err,data){
             if (err) {
                 console.log("Error found!");
                 res.send({"msg":"something went wrong"});
@@ -80,7 +127,8 @@ module.exports = function(app) {
 
     app.post('/api/update_result/', function (req, res) {
         var s=req.body
-        mdb.results.update({user_id: s.user_id,class_code: s.class_code,"results.sub_code":s.results[0].sub_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}}, function(err,data){
+        var school_code = req.query.school_code;
+        mdb.results.update({user_id: s.user_id,class_code: s.class_code,"results.sub_code":s.results[0].sub_code,school_code:school_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}}, function(err,data){
             if(err)
                 res.send({"msg":"something went wrong"});
             else
@@ -92,12 +140,12 @@ module.exports = function(app) {
 
     app.get('/api/get_all_result/', function (req, res) {
         console.log("working");
-        mdb.subjects.find({class_code:req.query.class},function(err,dt) {
+        mdb.subjects.find({class_code:req.query.class,school_code:req.query.school_code},function(err,dt) {
             if(dt.length==0 || err){
                 res.send({"msg":"Need To Update class "+req.query.class+" Suject"})
             }else{
-                mdb.results.find({class_code:req.query.class}, function (err1, data1) {
-                    if (err || dt.length==0) {
+                mdb.results.find({class_code:req.query.class,school_code:req.query.school_code}, function (err1, data1) {
+                    if (err || data1.length==0) {
                         console.log("Error found!");
                         res.send({"msg":"No Result created for "+req.query.class+"class"})
                     }
@@ -118,9 +166,10 @@ module.exports = function(app) {
                                 else{
                                     demo[data.subjects[v].subject_name]=isExist[0].obtain_marks;
                                     demo['obtain Marks']= demo['obtain Marks']+parseInt(isExist[0].obtain_marks);
-
                                 }
-                                demo['Total Marks']= demo['Total Marks']+parseInt(data.subjects[v].total);
+                                console.log("1")
+                                console.log(data.subjects[v])
+                                demo['Total Marks']= demo['Total Marks']+parseInt(data.subjects[v].total_marks);
                             }
                             dataFor.push(demo)
                         }
