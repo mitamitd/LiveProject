@@ -31,6 +31,7 @@
                 mdb.login.find({'user_id':username},function(err,data)
                     {
                     if (err) {
+                        console.log(err)
                         app.sendError(res,req,"Request error",err);
                     }
                     else if(data.length>0){

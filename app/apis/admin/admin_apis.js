@@ -113,22 +113,38 @@ app.post('/api/get_add_class_url/',function(req,res){
           });
     
 });*/
-
-    app.get('/api/get_all_student_of_school_and_classes/', function (req, res) {
+      app.get('/api/get_all_student_of_school_and_classes/',function(req,res){
         var school_code = req.query.school_code;
         var class_code = req.query.class_code;
-        mdb.user.find({school_code:school_code,"user_type": "student",class_code:class_code},function(err,data){
+        mdb.user.aggregate([{$match:{enabled: "true",school_code:school_code,"user_type": "student",class_code:class_code}},{
+              "$lookup": {
+                "from": "logins", //collection name
+                "localField": "user_id", // uid is exists in both collection
+                "foreignField": "user_id",
+                "as": "result"
+                }
+              }]).exec().then(function(data){
+                              app.send(req,res,data);
+                              }).catch(function(err){
+                                          console.log(err)
+                                          app.sendError(res,res,"Some error found!!",err);
+                                        })
+      });
+    /*app.get('/api/get_all_student_of_school_and_classes/', function (req, res) {
+        var school_code = req.query.school_code;
+        var class_code = req.query.class_code;
+        mdb.user.find({enabled: "true",school_code:school_code,"user_type": "student",class_code:class_code},function(err,data){
             if(err){
                 app.sendError(req,res,"error",err);
             }else{
                 app.send(req,res,data);
             }
         });
-    });
+    });*/
 
     app.get('/api/view_all_teacher/', function (req, res) {
         var school_code = req.query.school_code;
-        mdb.user.find({school_code:school_code,"user_type": "teacher"},function(err,data){
+        mdb.user.find({school_code:school_code,"user_type": "teacher",enabled: "true"},function(err,data){
             if(err){
                 app.sendError(req,res,"error",err);
             }else{

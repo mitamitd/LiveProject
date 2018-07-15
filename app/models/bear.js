@@ -11,14 +11,29 @@
     //config.user = mongoose.model('users', new Schema({ type: Schema.Types.Mixed }, { strict : false }));
 
     config.user = mongoose.model('users',{
-    first_name:{type:String},
-    last_name:{type:String},
-    rollno:{type:String},
-    user_id:{type:String},
-    key:{type:Schema.Types.Mixed},
-    studnetDetailAttArr:{type:Schema.Types.Mixed},
-    school_code: {type:String}
-    })
+        first_name:{type:String},
+        last_name:{type:String},
+        rollno:{type:String},
+        user_id:{type:String},
+        key:{type:Schema.Types.Mixed},
+        studnetDetailAttArr:{type:Schema.Types.Mixed},
+        school_code: {type:String},
+        father_name: {type:String},
+        sex: {type:String},
+        mother_name: {type:String},
+        admission_no: {type:String},
+        phone_no: {type:String},
+        caste: {type:String},
+        address: {type:String},
+        qualification: {type:String},
+        caste_name: {type:String},
+        aadhar_no: {type:String},
+        user_type: {type:String},
+        teacher_added: Number,
+        school_name: {type:String},
+        head_school_name: {type:String},
+        head_school_code: {type:String}
+        })
     //config.attendance = mongoose.model('attendances', new Schema({ type: Schema.Types.Mixed }, { strict : false }));
     config.attendance = mongoose.model('attendances',{
         data:{att:String,user_id:{type:String}},
@@ -65,7 +80,8 @@
         "exam_name":String,
         "school_code":String,
         "is_active":String,
-        "updated_by":String   
+        "updated_by":String,
+        "exam_code":Number   
     }))
     config.results =  mongoose.model('results', new Schema({
         "first_name" : String,
@@ -73,6 +89,7 @@
         "class_code" : String,
         // "class_teacher" : String,
         "user_id" : String,
+        "exam_name" : String,
         "updated_by":String,
         "school_code":String,
         "results" : [

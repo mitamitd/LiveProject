@@ -6,64 +6,88 @@ var _ = require('underscore');
 
 module.exports = function(app) {
 
+    
     //----------------------Create new Exam------------------------------//
     app.post('/api/create_new_exam/',function(req,res){
         var exam = req.body;
         var user_id = req.query.user_id;
         var school_code = req.query.school_code;
         
-        mdb.exam.find({"exam_name":exam.exam_name},function(err,data){
+        mdb.exam.find({school_code:school_code,"exam_name":exam.exam_name},function(err,data){
                 if(err){
                    app.sendError(req,res,"Some problem occur!!",err); 
                 }else if(data.length>0){
                     app.sendError(req,res,"Exam already added!!",err);
                 }
                 else{
-                    mdb.exam.update({school_code:school_code,is_active:"true"},{$set:{is_active:"false"}},function(err1,data1){
+                    generateNewExamCode(req,res,school_code,function(response){
+                        updateNewExamToDB(req,res,response,school_code,user_id,exam.exam_name);
+                        
+                    });
+
+                   }
+                
+            });
+    
+    });
+    
+    var generateNewExamCode = function(req,res,school_code,callback){
+        mdb.exam.aggregate([{$match:{school_code:"smtohana"}},{$group:{_id:'$school_code',maxvalue:{$max : "$exam_code"} }} ]).exec(function ( err, data ) {
+            if(err){
+                app.sendError(req,res,"some error occur",err)
+            }
+            else if(data.maxvalue!=null){
+                callback(data.maxvalue+1);
+            }
+            else{
+                callback(1);
+            }          
+            });
+    }
+
+    var updateNewExamToDB = function(req,res,response,school_code,user_id,exam_name){
+        mdb.exam.update({school_code:school_code,is_active:"true"},{$set:{is_active:"false"}},function(err1,data1){
                             if(err1){
                                 app.sendError(req,res,"",err1)
                             }
                              else {
                                     var examobj = new mdb.exam();
-                                    examobj.collection.insert({"exam_name":exam.exam_name,updated_by:user_id,school_code:school_code,is_active:"true"},
+                                    
+                                    examobj.collection.insert({"exam_name":exam_name,exam_code:response,updated_by:user_id,school_code:school_code,is_active:"true"},
                                     function(err2,data2){
                                             if(err2){
                                                 app.sendError(req,res,"Some Error occur!!",err2);
                                             }
                                             else{
-                                                
+                                                console.log(data2)
                                                 app.send(req,res,"Data inserted successfully");
                                             }
                                         }); 
                                 }
 
                         });
-                   }
-                
-            });
-    
-    });
-
+    }
 
     //-----------------Create new Result--------------------//
     app.post('/api/create_result/', function (req, res) {
         var results=req.body;
         var user_id = req.query.user_id;
         var school_code = req.query.school_code;
-
+        var exam_name = "";
+        var exam_code = "";
         function getRandomNumber(obj) {
             return new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                    mdb.results.find({user_id:obj.user_id,class_code: obj.class_code,school_code:school_code}, function(err,data){
+                    mdb.results.find({user_id:obj.user_id,exam_code:exam_code,class_code: obj.class_code,school_code:school_code}, function(err,data){
                         if(data.length>0){
-                            mdb.results.find({user_id: obj.user_id,class_code: obj.class_code,school_code:school_code,"results.sub_code": obj.results[0].sub_code}, function(err1,data1){
+                            mdb.results.find({user_id: obj.user_id,exam_code:exam_code,class_code: obj.class_code,school_code:school_code,"results.sub_code": obj.results[0].sub_code}, function(err1,data1){
                                 var s=obj;
                                 if(data1.length>0){
-                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code,school_code:school_code,"results.sub_code": s.results[0].sub_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}  }, function(err3,data3){
+                                    mdb.results.update({user_id: s.user_id,exam_code:exam_code,class_code: s.class_code,school_code:school_code,"results.sub_code": s.results[0].sub_code},{$set:{"results.$.obtain_marks":s.results[0].obtain_marks}  }, function(err3,data3){
                                         resolve()
                                     })
                                 }else{
-                                    mdb.results.update({user_id: s.user_id,class_code: s.class_code,school_code:school_code},{$addToSet:{results: s.results[0]} }, function(err3,data3){
+                                    mdb.results.update({user_id: s.user_id,exam_code:exam_code,class_code: s.class_code,school_code:school_code},{$addToSet:{results: s.results[0]} }, function(err3,data3){
                                         console.log(data3);
                                         resolve()
                                     })
@@ -72,6 +96,8 @@ module.exports = function(app) {
                         }else{
                             obj['updated_by'] = user_id;
                             obj['school_code'] = school_code;
+                            obj['exam_name'] = exam_name;
+                            obj['exam_code'] = exam_code;
                             var  resultsDb = new mdb.results();
                             resultsDb.collection.insert(obj, function(err1,data1){
                                 resolve()
@@ -82,13 +108,28 @@ module.exports = function(app) {
             });
         }
         async function logNumbers() {
+            if(exam_name=="" || exam_code==""){
+                res.send({"msg":"Exam name or Exam code not found!! Please contact admin!!"});
+                return;
+            }
             for (var x = 0; x < results.length; x += 1) {
                 console.log( await  getRandomNumber(results[x]));
             }
         }
-        logNumbers(results);
-        res.send("");
+
+         mdb.exam.findOne({school_code:school_code,is_active:"true"},{"exam_name":1,"exam_code":1},function(err,data){
+            if(err){
+                app.sendError(req,res,"Error occur!!",err);
+            }else{
+                exam_name = data.exam_name;
+                exam_code = data.exam_code;
+                console.log(data.exam_name);
+                logNumbers(results);
+                res.send("");
+            }
+         });
     });
+
     app.get('/api/get_all_student_for_create_result', function (req, res) {
         var classCode = req.query.class;
         var subCode = req.query.subject;
@@ -177,7 +218,9 @@ module.exports = function(app) {
                     }
                 });
             }
+
         });
+
     });
 
 }

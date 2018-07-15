@@ -12,7 +12,6 @@ module.exports = function(app) {
     app.post('/api/add_student/', function (req, res) {
         var body = req.body;
         getStudentPrecode(body, function (err, studentPreCode) {
-                     if (studentPreCode.length > 0) {
                         var admission_no_as_userid = body.admission_no;
                         var code = JSON.stringify(studentPreCode[0]);
                         var cdo = JSON.parse(code);
@@ -25,18 +24,15 @@ module.exports = function(app) {
                                         app.send(req, res, result);
                                     }
                                 });
-                        })
-                    }
-
-
-                })
+                        });
+                });
     });
 
 
     var getStudentPrecode = function(body,callback){
         mdb.school.find({school_code: body.school_code}, {student_precode: 1, _id: 0}, function (err, precode) {
             if(err){
-
+                app.sendError(req, res, "Some Error occur!!", err);
             }else if(precode.length>0) {
                 callback(err, precode);
             }
@@ -49,7 +45,7 @@ module.exports = function(app) {
     var studentAdmissionNoExistsOrNot = function (body, callback) {
         mdb.user.find({user_id: body.user_id}, {admission_no: 1}, function (err, result) {
             if (err) {
-                app.sendError(req, res, "Error!!", err);
+                app.sendError(req, res, "Some Error occur!!", err);
             }
             if (result.length > 0) {
                 app.sendError(req, res, "Admission No already exist", err);
@@ -82,7 +78,7 @@ module.exports = function(app) {
                                 app.sendError(req, res, "Error!!", err);
                             }
                             else {
-                                paaswordEntyinlogins(req, res, function (err, success) {
+                                paaswordEntyinlogins(body, function (err, success) {
                                     callback(err, studentregisterdata);
                                 });
 
@@ -94,10 +90,10 @@ module.exports = function(app) {
             }
         });
     }
-    var paaswordEntyinlogins = function (req, res, callback) {
+    var paaswordEntyinlogins = function (body, callback) {
         var pass = Math.floor(Math.random(1000, 10000) * 10000);
         var data = {
-            "user_id": req.body.user_id,
+            "user_id": body.user_id,
             "password": pass,
             "enabled": "true"
         }
