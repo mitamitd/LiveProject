@@ -16,9 +16,11 @@ global.app = app;
 
 require('./app/apis/apis')(app);
 require('./app/apis/result')(app);
+require('./app/apis/fileupload')(app);
 require('./app/apis/admin/admin_apis')(app);
 require('./app/apis/admin/registration/student_registration_apis')(app);
 require('./app/apis/admin/registration/teacher_registration_apis')(app);
+
 
 var mdb = require('./app/models/bear');
 app.use(morgan('dev')); // log requests to the console

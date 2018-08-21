@@ -105,6 +105,13 @@
     }))
 
 
+    config.mediafiles = mongoose.model('mediafiles',new Schema({
+        "file_type":String,
+        "file_path":String,
+        "file_title":String,
+        "file_detail":{type:Schema.Types.Mixed}
+    }))
+
     config.user_direction = mongoose.model('user_directions',{
 
     })
