@@ -51,7 +51,9 @@ cloudinary.config({
 
 
 		app.get("/api/get_all_mediafiles/",function(req,res){
-			mdb.mediafiles.find({},function(err,data){
+			var page = req.query.page;
+			var fixlimit = 10;
+			mdb.mediafiles.find({}).sort({"_id":-1}).skip((page-1)*fixlimit).limit(fixlimit).exec(function(err,data){
 				if(err){
 					app.sendError(req,res,"error",err);
 				}else{
