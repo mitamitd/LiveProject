@@ -265,6 +265,94 @@
         })
 
 
+        app.get('/api/getAbsentStudentToday/',function(req,res){
+                    var username = req.query.username;
+                    var class_code = req.query.class_code;
+                    var school_code = req.query.school_code;
+                    var sdate = req.query.sdate;
+                    var sdateMillisec = imports.db.dates.currmilli(new Date());
+                    var edate = req.query.edate;
+                    var edateMillisec = imports.db.dates.currmilli(new Date());
+
+                    var obj = {"data.school_code":school_code,"data.class_code":class_code,"data.att":"A","updated_on.date": {"$gte": sdateMillisec, "$lte": edateMillisec}}
+                    mdb.attendance.find(obj,function(err,data){
+                            if(err){
+                                app.sendError(req,res,"No Data found",err);
+                                    }
+                            else
+                                {
+                                    console.log("getClassAtt "+data);
+                                if(data.length>0){
+                                        app.send(req,res,data);
+                                             }
+                                    else{
+
+                                        app.send(req,res,"No data found!!",data);
+                                    }
+                                }
+            });
+
+        })
+
+
+app.get('/api/getStudentAtt/',function(req,res){
+                    var username = req.query.username;
+                    var class_code = req.query.class_code;
+                    var school_code = req.query.school_code;
+                    var sdate = req.query.sdate;
+                    var sdateMillisec = imports.db.dates.currmilli(new Date(sdate));
+                    var edate = req.query.edate;
+                    var edateMillisec = imports.db.dates.currmilli(new Date(edate));
+
+                    var obj = {"data.school_code":school_code,"data.class_code":class_code,"data.user_id":username,"updated_on.date": {"$gte": sdateMillisec, "$lte": edateMillisec}}
+                    mdb.attendance.find(obj,function(err,data){
+                            if(err){
+                                    
+
+                                app.sendError(req,res,"No Data found",err);
+                                    }
+                            else
+                                {
+                                    console.log("getClassAtt "+data);
+                                if(data.length>0){
+
+var allBtwDates = [];
+                                    var startDate = moment(sdate).startOf('day');
+                                    var lastDate = moment(edate).startOf('day');
+                                    allBtwDates.push(moment(startDate).format('YYYY-MM-DD'));
+                                 while(startDate.add(1, 'days').diff(lastDate) < 1) 
+                                 {
+                                   allBtwDates.push(moment(startDate).format('YYYY-MM-DD'));
+                                 }
+
+                                var studentAttDataArr = [];
+                                for(var i=0;i<allBtwDates.length;i++){
+                                    var isFound = false;
+                                    for(var j=0;j<data.length;j++){
+                                        if(allBtwDates[i] == data[j].updated_on.date_YYYYMMDD){
+                                            studentAttDataArr.push(data[j]);
+                                            isFound = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!isFound){
+                                        studentAttDataArr.push({"updated_on":{"date_YYYYMMDD":allBtwDates[i]},"data":{"att":"-"}});
+                                    }
+                                }
+
+                                        app.send(req,res,studentAttDataArr);
+                                             }
+                                    else{
+
+                                        app.send(req,res,"No data found!!",data);
+                                    }
+                                }
+            });
+
+        })
+
+
+
         app.get('/api/checkingdate/', function (req, res) {
             var username = req.query.username;
             var date  = req.query.date;
@@ -364,6 +452,7 @@
                             {
         /*                     data = new app.getDataInFormat(data);
                                data.sessionID = sessionID;*/
+                               
                               return app.send(req,res,data);
         //                        return app.send(req,res,{username:"smt01"});
                           }

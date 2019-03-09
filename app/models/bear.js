@@ -109,8 +109,31 @@
         "file_type":String,
         "file_path":String,
         "file_title":String,
-        "file_detail":{type:Schema.Types.Mixed}
+        "file_detail":{type:Schema.Types.Mixed},
+        "uploaded_by":String,
+        "school_code":String
     }))
+
+    config.homeworks = mongoose.model('class_homeworks',new Schema({
+        "file_path":String,
+        "file_title":String,
+        "file_detail":{type:Schema.Types.Mixed},
+        "uploaded_by":String,
+        "school_code":String,
+        "class":String,
+        "subject_code":String,
+        "updated_on":
+         { 
+            datetime:{type:Number},
+            date: {type:Number},
+            datejs: {type:Schema.Types.Mixed},
+            datetimejs:{type:Schema.Types.Mixed},
+            date_YYYYMMDD:{type:String},
+            month: {type:Number},
+            year: {type:Number},
+            day: {type:Number} 
+        }
+    }));
 
     config.user_direction = mongoose.model('user_directions',{
 
